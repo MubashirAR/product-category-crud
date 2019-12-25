@@ -1,0 +1,15 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <label>
+    Category Name:
+    <input type="text" formControlName="name">
+  </label>
+
+  <label>
+    Unique Category ID:
+    <input type="text" formControlName="categoryId">
+  </label>
+  <button type="submit">Submit</button>
+
+
+</form>

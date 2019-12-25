@@ -1,0 +1,21 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <label>
+    Product Name:
+    <input type="text" formControlName="name">
+  </label>
+
+  <label>
+    Unique Product ID:
+    <input type="text" formControlName="productId">
+  </label>
+  <label >
+    Category:
+    <select formControlName="_categoryId">
+      <option *ngFor="let category of categories" value="{{category._id}}">{{category.name}}</option>
+    </select>
+  </label>
+  <button type="submit">Submit</button>
+
+
+</form>
