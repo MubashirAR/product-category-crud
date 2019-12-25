@@ -9,23 +9,42 @@ function hello(params) {
  * @param {Object} params [params containing the pageNumber and limit]
  * @param {Function} callback [The callback with error or response]
  */
-function get(params, callback) {
+async function get(params, callback) {
+
+  try {
+    if (!validateGetInput(params))
+      return callback({
+        message: 'Invalid pageNumber or limit',
+      });
+    let skip = params.pageNumber * params.limit;
+    let limit = Number(params.limit);
+    delete params.pageNumber;
+    delete params.limit;
+    console.log({params});
+    
+    let count = await Models.Product.find(params)
+      .populate('_categoryId')
+      .count()
+      .exec();
+    console.log({count});
+    
+    let products = await Models.Product.find(params)
+      .populate('_categoryId')
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    callback(null, {count, products});
+  } catch (error) {
+    callback(error);
+  }
   
-  if (!validateGetInput(params))
-    return callback({
-      message: 'Invalid pageNumber or limit',
-    });
-  let skip = params.pageNumber * params.limit;
-  let limit = Number(params.limit);
-  Models.Product.find()
-    .skip(skip)
-    .limit(limit)
-    .exec(callback);
 }
 function insert(params, callback){
   console.log({params});
-  
-  Models.Product.create(params,  (err, resp) => {
+  let query = validateInsertInput(params)
+  Models.Product.create(query,  (err, resp) => {
+    console.log({err});
+    
     if (err && err.code === 11000)
       return callback({
         message: 'Product ID must be unique!',
@@ -40,6 +59,7 @@ function insert(params, callback){
  */
 function update(params, callback) {
   let payload = validateUpdateInput({...params})
+  
   Models.Product.updateOne({_id: ObjectId(params._id)}, payload, (err, resp) => {
     if (err && err.code === 11000)
       return callback({
@@ -63,9 +83,20 @@ function validateGetInput(params = {}) {
   return isValid;
 }
 function validateUpdateInput(params = {}) {
-  let { name } = params
+  let { name, _categoryId, productId } = params
   let payload = {
-    name
+    name,
+    productId,
+    _categoryId
+  }
+  return payload;
+}
+function validateInsertInput(params = {}) {
+  let { name, productId, _categoryId } = params
+  let payload = {
+    name,
+    productId,
+    _categoryId
   }
   return payload;
 }

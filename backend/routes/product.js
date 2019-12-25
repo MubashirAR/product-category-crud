@@ -28,7 +28,7 @@ router.post('/', function(req, res) {
 router.put('/', function(req, res) {
   product.update(req.body, (err, data) => {
     if(err) return res.status(500).json({
-      message: err.message || 'Error while adding product',
+      message: err.message || 'Error while editing product',
       error: err
     });
     res.status(201).json({
@@ -38,9 +38,9 @@ router.put('/', function(req, res) {
   });
 });
 router.delete('/', function(req, res) {
-  product.remove(req.body, (err, data) => {
+  product.remove(req.query, (err, data) => {
     if(err) return res.status(500).json({
-      message: err.message || 'Error while adding product',
+      message: err.message || 'Error while deleting product',
       error: err
     });
     res.status(201).json({

@@ -28,7 +28,7 @@ router.post('/', function(req, res) {
 router.put('/', function(req, res) {
   category.update(req.body, (err, data) => {
     if(err) return res.status(500).json({
-      message: err.message || 'Error while adding category',
+      message: err.message || 'Error while updating category',
       error: err
     });
     res.status(201).json({
@@ -38,9 +38,11 @@ router.put('/', function(req, res) {
   });
 });
 router.delete('/', function(req, res) {
-  category.remove(req.body, (err, data) => {
+  console.log({query: req.query});
+  
+  category.remove(req.query, (err, data) => {
     if(err) return res.status(500).json({
-      message: err.message || 'Error while adding category',
+      message: err.message || 'Error while removing category',
       error: err
     });
     res.status(201).json({

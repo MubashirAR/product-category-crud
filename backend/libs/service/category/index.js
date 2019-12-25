@@ -20,7 +20,9 @@ function get(params, callback) {
     });
   let skip = params.pageNumber * params.limit;
   let limit = Number(params.limit);
-  Models.Category.find()
+  delete params.pageNumber;
+  delete params.limit;
+  Models.Category.find(params)
     .skip(skip)
     .limit(limit)
     .exec(callback);
@@ -31,7 +33,8 @@ function get(params, callback) {
  * @param {Function} callback [The callback function which receives the error and response]
  */
 function insert(params, callback) {
-  Models.Category.create(params, (err, resp) => {
+  let query = validateInsertInput(params);
+  Models.Category.create(query, (err, resp) => {
     if (err && err.code === 11000)
       return callback({
         message: 'Category ID must be unique!',
@@ -60,7 +63,10 @@ function update(params, callback) {
  * @param {Function} callback [The callback function which receives the error and response]
  */
 function remove(params, callback) {
-  Models.Category.deleteOne(params, callback);
+  if(!ObjectId.isValid(params._id)) return callback({
+    message: 'invalid id'
+  })
+  Models.Category.updateOne({_id: ObjectId(params._id)}, {isActive: false}, callback);
 }
 
 // Input Validation functions
@@ -68,10 +74,19 @@ function validateGetInput(params = {}) {
   let isValid = !isNaN(params.pageNumber) && !isNaN(params.limit);
   return isValid;
 }
-function validateUpdateInput(params = {}) {
-  let { name } = params
+function validateInsertInput(params = {}) {
+  let { name, categoryId } = params
   let payload = {
-    name
+    name,
+    categoryId
+  }
+  return payload;
+}
+function validateUpdateInput(params = {}) {
+  let { name, categoryId } = params
+  let payload = {
+    name,
+    categoryId
   }
   return payload;
 }
