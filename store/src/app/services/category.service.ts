@@ -10,13 +10,13 @@ export class CategoryService {
   get(data) {
     return this
       .http
-      .get('http://localhost:3000/category', { params: data })
+      .get('http://localhost:3000/api/category', { params: data })
       .toPromise();
   }
   insert(data) {
     this
       .http
-      .post('http://localhost:3000/category', data)
+      .post('http://localhost:3000/api/category', data)
       .toPromise()
       .then(data => {
         alert('data inserted successfully!');
@@ -28,7 +28,7 @@ export class CategoryService {
   update(data) {
     this
       .http
-      .put('http://localhost:3000/category', data)
+      .put('http://localhost:3000/api/category', data)
       .toPromise()
       .then(data => {
         alert('data updated successfully!');
@@ -40,7 +40,7 @@ export class CategoryService {
   delete(data) {
     return this
       .http
-      .delete('http://localhost:3000/category', {params: data})
+      .delete('http://localhost:3000/api/category', {params: data})
       .toPromise()
   }
 }

@@ -11,13 +11,13 @@ export class ProductService {
   get(data) {
     return this
       .http
-      .get('http://localhost:3000/product', { params: data })
+      .get('http://localhost:3000/api/product', { params: data })
       .toPromise();
   }
   insert(data) {
     this
       .http
-      .post('http://localhost:3000/product', data)
+      .post('http://localhost:3000/api/product', data)
       .toPromise()
       .then(data => {
         alert('data inserted successfully!');
@@ -29,7 +29,7 @@ export class ProductService {
   update(data) {
     this
       .http
-      .put('http://localhost:3000/product', data)
+      .put('http://localhost:3000/api/product', data)
       .toPromise()
       .then(data => {
         alert('data updated successfully!');
@@ -43,7 +43,7 @@ export class ProductService {
   delete(data) {
     return this
       .http
-      .delete('http://localhost:3000/product', {params: data})
+      .delete('http://localhost:3000/api/product', {params: data})
       .toPromise();
   }
 }

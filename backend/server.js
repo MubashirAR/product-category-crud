@@ -10,5 +10,6 @@ mongoose.connect('mongodb://localhost:27017/mubashir', { useNewUrlParser: true }
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/', routes);
+app.use('/api', routes);
+app.use('/', express.static('./public'));
 app.listen(3000);

@@ -39,13 +39,17 @@ export class ProductFormComponent implements OnInit {
               .get({ pageNumber: 0, limit: 0 })
         })
         .then((data: any) => {
-          if (data && data.data.length && data.data.length) {
-            let {_categoryId} = this.form.value;
-            this.categories = data.data.filter(cat => _id ? ((_categoryId === cat._id) || cat.isActive) : cat.isActive);
-          }
+          this.filterCategories(_id, data)
         })
         .catch(error => {
           alert(`couldn't fetch info: ${error && error.error && error.error.message}`);
+        });
+    } else {
+      this
+        .category
+        .get({ pageNumber: 0, limit: 0 })
+        .then((data: any) => {
+          this.filterCategories(_id, data);
         });
     }
 
@@ -57,5 +61,15 @@ export class ProductFormComponent implements OnInit {
       return;
     }
     this.product.insert(this.form.value);
+  }
+  filterCategories(_id, data){
+    if (data && data.data.length && data.data.length) {
+      let {_categoryId} = this.form.value;
+      this.categories = data.data.filter(cat => {
+        console.log({cat});
+
+        return _id ? ((_categoryId === cat._id) || cat.isActive) : cat.isActive
+      });
+    }
   }
 }
