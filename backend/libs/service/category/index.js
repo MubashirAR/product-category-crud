@@ -14,12 +14,13 @@ function hello(params) {
  */
 function get(params, callback) {
   
-  if (!validateGetInput(params))
-    return callback({
-      message: 'Invalid pageNumber or limit',
-    });
-  let skip = params.pageNumber * params.limit;
-  let limit = Number(params.limit);
+  // if (!validateGetInput(params))
+  //   return callback({
+  //     message: 'Invalid pageNumber or limit',
+  //   });
+  let { pageNumber = 0, limit = 10 } = params;
+  let skip = pageNumber * limit;
+  limit = Number(limit);
   delete params.pageNumber;
   delete params.limit;
   Models.Category.find(params)

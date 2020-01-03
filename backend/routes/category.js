@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
   category.insert(req.body, (err, data) => {
     if(err) return res.status(500).json({
-      message: err.message || 'Error while adding category',
+      message: err._message || 'Error while adding category',
       error: err
     });
     res.status(201).json({
