@@ -1,4 +1,5 @@
 Models = require('../../../models');
+let { ObjectId } = require('mongoose').Types
 
 function hello(params) {
   return 'hello';
@@ -19,6 +20,9 @@ async function get(params, callback) {
     limit = Number(limit);
     delete params.pageNumber;
     delete params.limit;
+    if(params._id && ObjectId.isValid(params._id)) {
+      params._id = ObjectId(params._id);
+    }
     console.log({ params });
 
     let res = await Models.Product.aggregate([
@@ -36,12 +40,13 @@ async function get(params, callback) {
             },
             {
               $lookup: {
-                from: 'Category',
+                from: 'categories',
                 localField: '_categoryId',
                 foreignField: '_id',
                 as: '_categoryId',
               },
             },
+            { $unwind: '$_categoryId'}
           ],
         },
       },
